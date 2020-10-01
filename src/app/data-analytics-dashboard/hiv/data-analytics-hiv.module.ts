@@ -42,6 +42,7 @@ import {
 } from './moh-731-monthly-viz/moh-731-monthly-viz.component';
 import { SurgeReportComponent } from './surge/surge-report.component';
 import { ReportingUtilitiesModule } from 'src/app/reporting-utilities/reporting-utilities.module';
+import { IPTReportComponent } from './ipt/IPT-report.component';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { ReportingUtilitiesModule } from 'src/app/reporting-utilities/reporting-
     ChangeDepartmentModule,
     KibanaLibModule,
     ReportingUtilitiesModule,
+    IPTReportComponent
   ],
   exports: [
     RouterModule,

@@ -19,14 +19,14 @@ export class IptBaseReportComponent implements OnInit {
   public params: {
     locationUuids: string;
     endDate: any;
-    displayTabluarFilters: boolean;
+    displayTabularFilters: boolean;
   };
   public showInfoMessage: boolean;
   public statusError: boolean;
   public errorMessage = '';
   public columnDefs: any = [];
   public iptReportData: any = [];
-  public displayTabluarFilters = false;
+  public displayTabularFilters = false;
   public pinnedBottomRowData: Array<any> = [];
   month: any;
 
@@ -62,7 +62,7 @@ export class IptBaseReportComponent implements OnInit {
     this.params = {
       locationUuids: this.locationUuids,
       endDate: Moment(this.month).endOf('month').format('YYYY-MM-DD'),
-      displayTabluarFilters: this.displayTabluarFilters,
+      displayTabularFilters: this.displayTabularFilters,
     };
     // store params in url
     this.router.navigate([], {
