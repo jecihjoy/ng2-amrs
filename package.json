@@ -17,17 +17,6 @@
     "prestart": "node version.js",
     "prettier:check": "prettier --check src/app"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,css,md,ts}": [
-      "prettier --write src/app",
-      "npm run lint ngx-amrs"
-    ]
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^6.1.0",

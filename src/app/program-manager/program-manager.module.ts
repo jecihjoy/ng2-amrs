@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { EditPatientIdentifierComponent } from './../patient-dashboard/common/patient-identifier/edit-patient-identifier.component';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA,NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -66,7 +67,8 @@ import { EnrollmentShortcutComponent } from './enrollment-shortcut/enrollment-sh
     UnenrollPatientProgramsComponent,
     EnrollmentShortcutComponent,
     ProgramWizardHeaderComponent,
-    ProgramManagerBaseComponent
+    ProgramManagerBaseComponent,
+    EditPatientIdentifierComponent
   ],
   declarations: [
     PatientReferralBaseComponent,
@@ -87,7 +89,8 @@ import { EnrollmentShortcutComponent } from './enrollment-shortcut/enrollment-sh
     EnrollmentShortcutComponent,
     ProgramWizardHeaderComponent,
     ProgramManagerBaseComponent,
-    ProgramReferralStatusComponent
+    ProgramReferralStatusComponent,
+    EditPatientIdentifierComponent
   ],
   providers: [
     ProgramEnrollmentResourceService,
@@ -95,6 +98,7 @@ import { EnrollmentShortcutComponent } from './enrollment-shortcut/enrollment-sh
     ProgramReferralResourceService,
     ProgramManagerService,
     PatientService
-  ]
+  ],
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class ProgramManagerModule {}

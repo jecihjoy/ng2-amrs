@@ -7,6 +7,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -48,6 +49,7 @@ export class NewProgramComponent
   public groupEnrollmentState: any;
   public patientCurrentGroups: any;
   public retroSettings: any;
+  public isCCCIdentifierAssigned: Boolean = false;
 
   constructor(
     public patientService: PatientService,
@@ -63,7 +65,8 @@ export class NewProgramComponent
     private programManagerService: ProgramManagerService,
     private locationResourceService: LocationResourceService,
     private groupMemberService: CommunityGroupMemberService,
-    private risonService: RisonService
+    private risonService: RisonService,
+    // private editPatientIdentifierComponent: EditPatientIdentifierComponent
   ) {
     super(
       patientService,
@@ -366,6 +369,13 @@ export class NewProgramComponent
   }
 
   public onRequiredQuestionChange(question) {
+    // console.log('question ', question)  //identifiers.showDialog('add', patient?._identifier, true)
+    this.patient.identifiers.openmrsModel.forEach(element => {
+      if (element.identifierType.uuid == 'f2d6ff1a-8440-4d35-a150-1d4b5a930c5e') {
+        this.isCCCIdentifierAssigned = true
+      }
+    });
+
     question = this.checkRelatedQuestions(question);
     // pick questions that have wrong answer
     const questionWithWrongAnswer = _.find(
@@ -380,6 +390,11 @@ export class NewProgramComponent
 
     if (questionWithWrongAnswer) {
       this.preQualifyProgramEnrollment(questionWithWrongAnswer);
+    } else if (question.value == 'positive' && this.isCCCIdentifierAssigned == false) { // identifiers.showDialog('add', patient?._identifier, true)
+      console.log('inside check')
+      // this.editPatientIdentifierComponent.showDialog('add',true)
+        this.showMessage(`Patient requires ccc before being enrolled. <button (click)="showIdPopup()"><strong><em>Click here to assign</em></strong></button>`);
+      this.isButtonVisible = false;
     } else {
       this.removeMessage();
       this.isButtonVisible = true;
@@ -648,7 +663,7 @@ export class NewProgramComponent
       if (!this.programVisitConfig.enrollmentAllowed) {
         this.showMessage(
           'The patient is not allowed to be enrolled in this program. ' +
-            'Please confirm the sex of the patient.'
+          'Please confirm the sex of the patient.'
         );
         this.isButtonVisible = false;
       } else {
@@ -691,9 +706,6 @@ export class NewProgramComponent
         .showMessage(`The question <strong><em>${question.name}</em></strong> MUST be
           '${requiredStatus.label}' to be able to enroll the patient into this program`);
       this.isButtonVisible = false;
-    } else {
-      this.removeMessage();
-      this.isButtonVisible = true;
     }
   }
 
