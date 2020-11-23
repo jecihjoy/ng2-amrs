@@ -1,0 +1,84 @@
+<div class="alert alert-danger fade in" *ngIf="showInfoMessage">
+  <a href="#" class="close" data-dismiss="alert">&times;</a>
+  <h4 *ngIf="!statusError">
+    <strong><span class="glyphicon glyphicon-warning-sign"></span> </strong>
+    An error occurred while trying to load data. Please try again.
+  </h4>
+  <p>
+    <small>{{ errorMessage }}</small>
+  </p>
+</div>
+<div>
+  <div class="loader" *ngIf="isLoading">
+    <span><i class="fa fa-spinner fa-spin"></i>Loading...</span>
+  </div>
+
+  <div class="contact-profile-container">
+    <div class="contact-profile-section">
+      <div class="grid-container">
+        <div>Contact Name</div>
+        <div>
+          : <b>{{ contactInformation.fm_name }}</b>
+        </div>
+        <div>Relationship</div>
+        <div>
+          : <b>{{ contactInformation.relationship_type }}</b>
+        </div>
+        <div>Gender</div>
+        <div>
+          : <b>{{ contactInformation.fm_gender }}</b>
+        </div>
+        <div>Date of Birth</div>
+        <div>
+          : <b>{{ contactInformation.fm_dob }}</b>
+        </div>
+        <div>Age</div>
+        <div>
+          : <b>{{ contactInformation.fm_age }}</b>
+        </div>
+      </div>
+      <div class="grid-container">
+        <div>Physical Address</div>
+        <div>
+          : <b>{{ contactInformation.fm_address }}</b>
+        </div>
+        <div>Phone Contact</div>
+        <div>
+          : <b>{{ contactInformation.fm_phone }}</b>
+        </div>
+      </div>
+
+      <div class="grid-container">
+        <div>Status</div>
+        <div>
+          : <b>{{ contactInformation.fm_status }}</b>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 1rem">
+      <h3>Trace History</h3>
+      <hr />
+      <ag-grid-angular
+        *ngIf="contactTraceHistory.length"
+        #agGrid
+        style="width: 100%; height: 200px"
+        class="ag-blue"
+        [rowData]="contactTraceHistory"
+        [gridOptions]="gridOptions"
+        [frameworkComponents]="frameworkComponents"
+      >
+        ></ag-grid-angular
+      >
+      <hr />
+      <div *ngIf="!contactTraceHistory.length">
+        <h4>No contact history available</h4>
+      </div>
+    </div>
+    <hr />
+    <div>
+      <button (click)="openAddTraceModal()" class="btn btn-success">
+        Add Trace
+      </button>
+    </div>
+  </div>
+</div>

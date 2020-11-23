@@ -134,6 +134,14 @@
               >
                 <span class="id-label">OVC ID:</span>Not assigned
               </span>
+              <span *ngIf="patient?.person.display">
+                <button
+                  class="btn btn-success"
+                  (click)="navigateToFamilyHistory()"
+                >
+                  Family History
+                </button>
+              </span>
               <span>
                 <div *ngIf="patient" class="btn-group pull-right" dropdown>
                   <button type="button" class="btn btn-default">
@@ -296,6 +304,14 @@
             <span *ngIf="attributes?.value">
               <span class="id-label">Test Patient:</span>
               {{ attributes?.value }}
+            </span>
+            <span *ngIf="patient?.person.display">
+              <button
+                class="btn btn-success"
+                (click)="navigateToFamilyHistory()"
+              >
+                Family History
+              </button>
             </span>
             <span
               *ngIf="ovcEnrollment && searchIdentifiers.ovcid == undefined"
