@@ -21,6 +21,9 @@ export class ContactProfileComponent implements OnInit {
   public errorMessage = '';
   public showInfoMessage = false;
   public isLoading = true;
+  public isContactEligible = false;
+  public contactNotEligible = false;
+  public isTracedTested = false;
 
   @Output() showModal = new EventEmitter();
 
@@ -67,6 +70,16 @@ export class ContactProfileComponent implements OnInit {
         }
       });
     this.gridOptions.columnDefs = this.columnDefs;
+  
+    if (this.contactInformation.eligible_for_tracing == 2) {
+      this.isContactEligible = true;
+    }
+    if (this.contactInformation.eligible_for_tracing == 0) {
+      this.contactNotEligible = true
+    }
+    if (this.contactInformation.eligible_for_tracing == 1) {
+      this.isTracedTested = true;
+    }
   }
 
   constructor(

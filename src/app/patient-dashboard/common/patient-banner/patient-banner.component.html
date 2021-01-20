@@ -136,7 +136,7 @@
               </span>
               <span *ngIf="patient?.person.display">
                 <button
-                  class="btn btn-success"
+                  class="btn btn-default"
                   (click)="navigateToFamilyHistory()"
                 >
                   Family History
@@ -477,4 +477,29 @@
   <div class="margin-bottom-5 clear clear-fix">&nbsp;</div>
   <add-relationship #addRelationship></add-relationship>
   <edit-identifiers #identifiers></edit-identifiers>
+
+  <p-dialog
+    header="List of contacts"
+    [(visible)]="displayContacts"
+    styleClass="contact-list-dialog"
+  >
+    <div class="container-fluid">
+      <app-contact-list (onButtonClicked)="hidePopup($event)"></app-contact-list>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2">
+          <button class="btn btn-primary" (click)="updateContacts()">
+            Add/Update Contacts
+          </button>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+          <button class="btn btn-warning" (click)="onClickCancel(false)">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
 </div>

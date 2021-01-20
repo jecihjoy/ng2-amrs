@@ -109,6 +109,7 @@ import { ZscoreService } from '../shared/services/zscore.service';
 import { ContactProfileComponent } from './family-testing/contact-profile/contact-profile.component';
 import { AddContactTraceComponent } from './family-testing/contact-trace/add-contact-trace.component';
 import { EditContactTraceComponent } from './family-testing/contact-trace/edit-contact-trace.component';
+import { ContactListComponent } from './family-testing/contact-list/contact-list.component';
 @NgModule({
   imports: [
     RouterModule,
@@ -192,7 +193,8 @@ import { EditContactTraceComponent } from './family-testing/contact-trace/edit-c
     FamilyTestingButtonRendererComponent,
     ContactProfileComponent,
     AddContactTraceComponent,
-    EditContactTraceComponent
+    EditContactTraceComponent,
+    ContactListComponent
   ],
   declarations: [
     Moh731TabularComponent,
@@ -253,7 +255,8 @@ import { EditContactTraceComponent } from './family-testing/contact-trace/edit-c
     FamilyTestingButtonRendererComponent,
     ContactProfileComponent,
     AddContactTraceComponent,
-    EditContactTraceComponent
+    EditContactTraceComponent,
+    ContactListComponent
   ],
   providers: [
     MOHReportService,

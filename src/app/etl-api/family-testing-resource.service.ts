@@ -21,7 +21,7 @@ export class FamilyTestingService {
     return this.appSettingsService.getOpenmrsRestbaseurl().trim();
   }
 
-  public getFamilyTestingReportDate(patientId: string): Observable<any> {
+  public getFamilyTestingReportData(patientId: string): Observable<any> {
     return this.http
       .get(`${this.url}patient-family-history?patientUuid=${patientId}`)
       .pipe(

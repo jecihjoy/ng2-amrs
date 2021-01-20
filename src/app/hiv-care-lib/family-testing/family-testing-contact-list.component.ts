@@ -63,14 +63,19 @@ export class FamilyTestingContactComponent implements OnInit {
     { field: 'relationship_type', headerName: 'Relationship' },
     { field: 'fm_age', headerName: 'Age' },
     { field: 'fm_status', headerName: 'Reported HIV status' },
-    { field: 'in_care', headerName: 'In care' },
+    { field: 'reported_test_date', headerName: 'Reported HIV test date' },
     {
-      field: 'eligible_for_testing',
+      field: 'test_eligible',
       headerName: 'Eligible for HIV testing'
     },
-    { field: 'current_test_results', headerName: 'Current test results' },
-    { field: 'reported_test_date', headerName: 'HIV test date' },
-    { field: 'fm_address', headerName: 'Nearest Center' },
+    {
+      field: 'preferred_testing_date',
+      headerName: 'Preferred date of testing'
+    },
+    { field: 'test_result_value', headerName: 'Current test results' },
+    { field: 'enrolled', headerName: 'In care' },
+    { field: 'ccc_number', headerName: 'CCC Number' },
+    { field: 'fm_facility_enrolled', headerName: 'Nearest Center' },
     {
       headerName: 'Actions',
       cellRenderer: 'buttonRenderer',
@@ -111,7 +116,7 @@ export class FamilyTestingContactComponent implements OnInit {
   public getFamilyTestingContactListData(patientId: string) {
     this.isLoading = true;
     this.familyTestingService
-      .getFamilyTestingReportDate(patientId)
+      .getFamilyTestingReportData(patientId)
       .subscribe((data) => {
         if (data.error) {
           this.showInfoMessage = true;

@@ -56,8 +56,7 @@
       </div>
     </div>
     <div style="margin-top: 1rem">
-      <h3>Trace History</h3>
-      <hr />
+      <h3><b>Trace History</b></h3>
       <ag-grid-angular
         *ngIf="contactTraceHistory.length"
         #agGrid
@@ -67,18 +66,19 @@
         [gridOptions]="gridOptions"
         [frameworkComponents]="frameworkComponents"
       >
-        ></ag-grid-angular
-      >
-      <hr />
-      <div *ngIf="!contactTraceHistory.length">
-        <h4>No contact history available</h4>
-      </div>
+      </ag-grid-angular>
     </div>
     <hr />
     <div>
-      <button (click)="openAddTraceModal()" class="btn btn-success">
+      <button [disabled]="!isContactEligible" (click)="openAddTraceModal()" class="btn btn-success">
         Add Trace
       </button>
+    </div>
+    <div *ngIf="contactNotEligible">
+      <h3><b>This contact is not eligible for testing hence needs no tracing</b></h3>
+    </div>
+    <div *ngIf="isTracedTested">
+      <h3><b>This contact has been traced and tested</b></h3>
     </div>
   </div>
 </div>
