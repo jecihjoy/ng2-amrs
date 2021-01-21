@@ -70,14 +70,14 @@ export class ContactProfileComponent implements OnInit {
         }
       });
     this.gridOptions.columnDefs = this.columnDefs;
-  
-    if (this.contactInformation.eligible_for_tracing == 2) {
+
+    if (this.contactInformation.eligible_for_tracing === 2) {
       this.isContactEligible = true;
     }
-    if (this.contactInformation.eligible_for_tracing == 0) {
-      this.contactNotEligible = true
+    if (this.contactInformation.eligible_for_tracing === 0) {
+      this.contactNotEligible = true;
     }
-    if (this.contactInformation.eligible_for_tracing == 1) {
+    if (this.contactInformation.eligible_for_tracing === 1) {
       this.isTracedTested = true;
     }
   }

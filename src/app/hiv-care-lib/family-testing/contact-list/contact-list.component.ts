@@ -13,6 +13,19 @@ export class ContactListComponent implements OnInit {
   private patientUuid: string;
   private indexContacts: Array<any> = [];
   public gridOptions = { columnDefs: [] };
+  private columnDefs = [
+    {
+      headerName: '#',
+      colId: 'rowNum',
+      valueGetter: 'node.rowIndex + 1',
+      width: 80,
+      pinned: 'left'
+    },
+    { field: 'fm_name', headerName: 'Contact Name' },
+    { field: 'fm_gender', headerName: 'Gender' },
+    { field: 'relationship_type', headerName: 'Relationship' },
+    { field: 'fm_age', headerName: 'Age' }
+  ];
 
   constructor(
     private familyTestingService: FamilyTestingService,
@@ -42,18 +55,4 @@ export class ContactListComponent implements OnInit {
         }
       });
   }
-
-  private columnDefs = [
-    {
-      headerName: '#',
-      colId: 'rowNum',
-      valueGetter: 'node.rowIndex + 1',
-      width: 80,
-      pinned: 'left'
-    },
-    { field: 'fm_name', headerName: 'Contact Name' },
-    { field: 'fm_gender', headerName: 'Gender' },
-    { field: 'relationship_type', headerName: 'Relationship' },
-    { field: 'fm_age', headerName: 'Age' }
-  ];
 }

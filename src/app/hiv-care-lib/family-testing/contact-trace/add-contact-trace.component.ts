@@ -1,13 +1,14 @@
+import { take } from 'rxjs/operators';
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventEmitter } from 'events';
 import { Location } from '@angular/common';
 
 import * as _ from 'lodash';
 import * as Moment from 'moment';
-import { ModalDirective } from 'ngx-bootstrap';
 import { FamilyTestingService } from 'src/app/etl-api/family-testing-resource.service';
-
+import { EncounterResourceService } from './../../../openmrs-api/encounter-resource.service';
+import { LocalStorageService } from './../../../utils/local-storage.service';
 @Component({
   selector: 'add-contact-trace',
   templateUrl: './add-contact-trace.component.html',
@@ -15,6 +16,9 @@ import { FamilyTestingService } from 'src/app/etl-api/family-testing-resource.se
 })
 export class AddContactTraceComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
+  public patientUuid: string;
+  public patientEncounters: Array<any> = [];
+
   public contactType: Array<{ label: string; val: number }> = [
     { label: 'Phone tracing', val: 1555 },
     { label: 'Physical tracing', val: 10791 }
@@ -23,9 +27,8 @@ export class AddContactTraceComponent implements OnInit {
   public selectedContactType: number;
   public contactedDate: string = Moment(new Date()).format('YYYY-MM-DD');
   public contactStatus: Array<{ label: string; val: number }> = [
-    { label: 'Contacted and linked', val: 1065 },
-    { label: 'Contacted but not linked', val: 1066 },
-    { label: 'Not contact', val: 1118 }
+    { label: 'Contacted', val: 1065 },
+    { label: 'Not contacted', val: 1118 }
   ];
   public selectedContactedStatus: string;
   public remarks;
@@ -51,17 +54,24 @@ export class AddContactTraceComponent implements OnInit {
   public contactId: number;
 
   public ngOnInit() {
-    this.router.parent.queryParams.subscribe((param) => {
+    this.route.parent.queryParams.subscribe((param) => {
       if (param) {
         this.contactId = Number(param.contact_id);
       }
     });
+    this.patientUuid = localStorage.getItem('family_testing_patient_uuid');
+    if (this.patientUuid != null) {
+      this.getPatientEncounters(this.patientUuid);
+    }
   }
 
   constructor(
     private familyTestingService: FamilyTestingService,
     private location: Location,
-    private router: ActivatedRoute
+    private route: ActivatedRoute,
+    public router: Router,
+    private encounterResourceService: EncounterResourceService,
+    private localStorageService: LocalStorageService
   ) {}
 
   public saveContactTrace() {
@@ -94,15 +104,35 @@ export class AddContactTraceComponent implements OnInit {
 
   public onContactStatusChange(status) {
     this.selectedContactedStatus = status.target.value;
-    if (Number(status.target.value) === 1118) {
+    if (Number(status.target.value) === 1065) {
+      // this.saveContactTrace();
+      this.openFamilyHistoryForm();
       this.displayNotContactedReasons = true;
-    } else {
-      this.displayNotContactedReasons = false;
     }
   }
 
-  public onNotContactedChange(reason) {
-    this.selectedNotContactedStatusReasons = reason.target.value;
+  public openFamilyHistoryForm() {
+    const encounterUuid = _.first(this.patientEncounters).uuid;
+    const familyPartnerHistoryFormV1 = `3fbc8512-b37b-4bc2-a0f4-8d0ac7955127`;
+    const url = `/patient-dashboard/patient/${this.patientUuid}/general/general/formentry/${familyPartnerHistoryFormV1}`;
+    this.router.navigate([url], {
+      queryParams: { encounter: encounterUuid, visitTypeUuid: '' }
+    });
+  }
+
+  public getPatientEncounters(patientUuid) {
+    const familyAndPartnerTestingFormUuid =
+      '3fbc8512-b37b-4bc2-a0f4-8d0ac7955127';
+    this.encounterResourceService
+      .getEncountersByPatientUuid(patientUuid, false, null)
+      .pipe(take(1))
+      .subscribe((resp) => {
+        this.patientEncounters = resp.reverse().filter((encounter) => {
+          if (encounter.form) {
+            return encounter.form.uuid === familyAndPartnerTestingFormUuid;
+          }
+        });
+      });
   }
 
   public goBack() {

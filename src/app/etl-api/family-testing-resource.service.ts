@@ -86,7 +86,7 @@ export class FamilyTestingService {
     );
   }
 
-  public getFamilyTestingEncounterByPatientUuid(patientUuid: string) {
+  public getPatientEncounters(patientUuid: string) {
     const familyTestingEncounterTypeUuid =
       '975ae894-7660-4224-b777-468c2e710a2a';
     return this.http.get(

@@ -136,7 +136,7 @@
               </span>
               <span *ngIf="patient?.person.display">
                 <button
-                  class="btn btn-default"
+                  class="btn btn-primary"
                   (click)="navigateToFamilyHistory()"
                 >
                   Family History
@@ -305,14 +305,6 @@
               <span class="id-label">Test Patient:</span>
               {{ attributes?.value }}
             </span>
-            <span *ngIf="patient?.person.display">
-              <button
-                class="btn btn-success"
-                (click)="navigateToFamilyHistory()"
-              >
-                Family History
-              </button>
-            </span>
             <span
               *ngIf="ovcEnrollment && searchIdentifiers.ovcid == undefined"
               (click)="
@@ -328,6 +320,13 @@
             >
               <span class="id-label">OVC ID:</span>Not assigned
             </span>
+          </span>
+          <span
+            *ngIf="patient?.person.display && isPatientEnrolledToHIVProgram"
+          >
+            <button class="btn btn-primary" (click)="navigateToFamilyHistory()">
+              Family History
+            </button>
           </span>
           <div
             *ngIf="patient && relationships.length > 0"
@@ -484,7 +483,8 @@
     styleClass="contact-list-dialog"
   >
     <div class="container-fluid">
-      <app-contact-list (onButtonClicked)="hidePopup($event)"></app-contact-list>
+      <app-contact-list
+      ></app-contact-list>
     </div>
     <div class="container">
       <div class="row">

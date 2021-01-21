@@ -15,43 +15,22 @@
 
   <div class="contact-profile-container">
     <div class="contact-profile-section">
-      <div class="grid-container">
-        <div>Contact Name</div>
-        <div>
-          : <b>{{ contactInformation.fm_name }}</b>
-        </div>
-        <div>Relationship</div>
-        <div>
-          : <b>{{ contactInformation.relationship_type }}</b>
-        </div>
-        <div>Gender</div>
-        <div>
-          : <b>{{ contactInformation.fm_gender }}</b>
-        </div>
-        <div>Date of Birth</div>
-        <div>
-          : <b>{{ contactInformation.fm_dob }}</b>
-        </div>
-        <div>Age</div>
-        <div>
-          : <b>{{ contactInformation.fm_age }}</b>
-        </div>
-      </div>
-      <div class="grid-container">
-        <div>Physical Address</div>
-        <div>
-          : <b>{{ contactInformation.fm_address }}</b>
-        </div>
-        <div>Phone Contact</div>
-        <div>
-          : <b>{{ contactInformation.fm_phone }}</b>
-        </div>
-      </div>
-
-      <div class="grid-container">
-        <div>Status</div>
-        <div>
-          : <b>{{ contactInformation.fm_status }}</b>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h5>Contact Name: <b>{{ contactInformation.fm_name }}</b></h5>
+            <h5>Relationship: <b>{{ contactInformation.relationship_type }}</b></h5>
+            <h5>Gender: <b>{{ contactInformation.fm_gender }}</b></h5>
+          </div>
+          <div class="col-md-4">
+            <h5>Age: <b>{{ contactInformation.fm_age }}</b></h5>  
+            <h5>Physical Address: <b>{{ contactInformation.fm_address }}</b></h5>
+            <h5>Phone Number: <b>{{ contactInformation.fm_phone }}</b></h5>
+          </div>
+          <div class="col-md-4">
+            <h5>Reported test result: <b>{{ contactInformation.fm_status }}</b></h5>
+            <h5>Eligible for testing: <b>{{ contactInformation.test_eligible }}</b></h5>
+          </div>
         </div>
       </div>
     </div>
@@ -60,7 +39,7 @@
       <ag-grid-angular
         *ngIf="contactTraceHistory.length"
         #agGrid
-        style="width: 100%; height: 200px"
+        style="width: 100%; height: 150px"
         class="ag-blue"
         [rowData]="contactTraceHistory"
         [gridOptions]="gridOptions"
@@ -75,7 +54,7 @@
       </button>
     </div>
     <div *ngIf="contactNotEligible">
-      <h3><b>This contact is not eligible for testing hence needs no tracing</b></h3>
+      <h3><b>This contact is not eligible for testing</b></h3>
     </div>
     <div *ngIf="isTracedTested">
       <h3><b>This contact has been traced and tested</b></h3>

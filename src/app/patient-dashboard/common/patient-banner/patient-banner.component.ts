@@ -102,7 +102,7 @@ export class PatientBannerComponent implements OnInit, OnDestroy, OnChanges {
           );
           this.getHIVPatient(_.filter(patient.enrolledPrograms, 'isEnrolled'));
           this.familyTestingService
-            .getFamilyTestingEncounterByPatientUuid(this.patient.uuid)
+            .getPatientEncounters(this.patient.uuid)
             .subscribe((response: any) => {
               this.familyTestingEncounterUuid = _.first<any>(
                 response.results

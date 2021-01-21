@@ -14,6 +14,7 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { FamilyTestingService } from 'src/app/etl-api/family-testing-resource.service';
 import { FamilyTestingButtonRendererComponent } from './button-render/button-renderer.component';
 import { EncounterResourceService } from 'src/app/openmrs-api/encounter-resource.service';
+import { LocalStorageService } from './../../utils/local-storage.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -95,6 +96,7 @@ export class FamilyTestingContactComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.patientUuid = params.patient_uuid;
       this.getFamilyTestingContactListData(this.patientUuid);
+      this.setPatientUuid(this.patientUuid);
     });
     this.gridOptions.columnDefs = this.columnDefs;
     this.getPatientEncounters();
@@ -106,7 +108,8 @@ export class FamilyTestingContactComponent implements OnInit {
     public route: ActivatedRoute,
     public location: Location,
     private modalService: BsModalService,
-    public router: Router
+    public router: Router,
+    private localStorageService: LocalStorageService
   ) {
     this.frameworkComponents = {
       buttonRenderer: FamilyTestingButtonRendererComponent
@@ -131,7 +134,7 @@ export class FamilyTestingContactComponent implements OnInit {
   }
 
   public getPatientEncounters() {
-    const familyAndPatnerTestingFormUuid =
+    const familyAndPartnerTestingFormUuid =
       '3fbc8512-b37b-4bc2-a0f4-8d0ac7955127';
     this.encounterResourceService
       .getEncountersByPatientUuid(this.patientUuid, false, null)
@@ -139,7 +142,7 @@ export class FamilyTestingContactComponent implements OnInit {
       .subscribe((resp) => {
         this.patientEncounters = resp.reverse().filter((encounter) => {
           if (encounter.form) {
-            return encounter.form.uuid === familyAndPatnerTestingFormUuid;
+            return encounter.form.uuid === familyAndPartnerTestingFormUuid;
           }
         });
       });
@@ -256,5 +259,11 @@ export class FamilyTestingContactComponent implements OnInit {
   public declineDelete(): void {
     console.log('Delete Action Rejected');
     this.deleteModalRef.hide();
+  }
+
+  private setPatientUuid(uuid: string) {
+    if (uuid != null) {
+      this.localStorageService.setItem('family_testing_patient_uuid', uuid);
+    }
   }
 }
