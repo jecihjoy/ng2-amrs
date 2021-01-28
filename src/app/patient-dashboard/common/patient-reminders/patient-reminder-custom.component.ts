@@ -45,6 +45,10 @@ export class PatientReminderCustomComponent extends Toast {
     super(toastrService, toastPackage);
     this.options['timeOut'] = 0;
     Object.assign(this._options, this.options);
+    console.log('OPTIONS ', this._options);
+
+    // setInterval(function(){
+    //   console.log('OPTIONS ', this._options); }, 3000);
   }
 
   public autoEnrollToProgram(event) {
