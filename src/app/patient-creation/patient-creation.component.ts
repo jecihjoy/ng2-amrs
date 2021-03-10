@@ -29,7 +29,7 @@ import { ConceptResourceService } from './../openmrs-api/concept-resource.servic
 import { SessionStorageService } from '../utils/session-storage.service';
 import { PatientRelationshipTypeService } from '../patient-dashboard/common/patient-relationships/patient-relation-type.service';
 import { PatientEducationService } from '../etl-api/patient-education.service';
-
+import { PatientResourceService } from 'src/app/openmrs-api/patient-resource.service';
 @Component({
   selector: 'patient-creation',
   templateUrl: './patient-creation.component.html',
@@ -143,6 +143,7 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
   public address7: any;
   public patientRelationshipTypes: any = [];
   public selectedRelationshipType: any;
+  public finalVal = [];
 
   constructor(
     public toastrService: ToastrService,
@@ -157,7 +158,8 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
     private conceptService: ConceptResourceService,
     private patientRelationshipTypeService: PatientRelationshipTypeService,
     private patientEducationService: PatientEducationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private patientResourceService: PatientResourceService
   ) {}
 
   public ngOnInit() {
@@ -664,46 +666,128 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
         },
         identifiers: ids
       };
-      this.errorAlerts = [];
-      const savePatientSub = this.patientCreationResourceService
-        .savePatient(payload)
-        .pipe(take(1))
-        .subscribe(
-          (success) => {
-            this.loaderStatus = false;
-            this.sessionStorageService.remove('person');
-            this.createdPatient = success;
-            if (this.createdPatient && !this.patientObsGroupId) {
-              this.modalRef = this.modalService.show(this.successModal, {
-                backdrop: 'static',
-                keyboard: false
-              });
-            } else if (this.patientObsGroupId) {
-              const patient: Patient = success as Patient;
-              this.patientCreationResourceService
-                .updatePatientContact(
-                  patient.person.uuid,
-                  this.patientObsGroupId
-                )
-                .subscribe((response) => {
-                  this.router.navigate([
-                    '/patient-dashboard/patient/' +
-                      patient.person.uuid +
-                      '/general/general/landing-page'
-                  ]);
-                });
-            }
-          },
-          (err) => {
-            this.loaderStatus = false;
-            const error = err.error.error.globalErrors;
-            this.errorAlert = true;
-            this.errorAlerts = error;
-          }
-        );
 
-      this.subscriptions.push(savePatientSub);
+      const savePatientSub = null;
+      const currentId = '';
+      this.errorAlerts = [];
+
+      this.hasSameIdTypeAndValue(ids, '').then((res) => {
+        console.log('hasSameIdTypeAndValue ', res);
+      });
+
+      if (true) {
+        console.log('711 inside else ', currentId);
+        this.loaderStatus = false;
+        const error = [
+          {
+            code:
+              'Identifier ' + currentId + ' already in use by another patient',
+            message:
+              'Identifier ' + currentId + ' already in use by another patient'
+          }
+        ];
+        this.errorAlert = true;
+        this.errorAlerts = error;
+        console.log('MWISHO 707 ', this.errorAlerts);
+      }
+      /*else {
+        console.log('711 inside if');
+        savePatientSub = this.patientCreationResourceService
+          .savePatient(payload)
+          .pipe(take(1))
+          .subscribe(
+            (success) => {
+              this.loaderStatus = false;
+              this.sessionStorageService.remove('person');
+              this.createdPatient = success;
+              if (this.createdPatient && !this.patientObsGroupId) {
+                this.modalRef = this.modalService.show(this.successModal, {
+                  backdrop: 'static',
+                  keyboard: false
+                });
+              } else if (this.patientObsGroupId) {
+                const patient: Patient = success as Patient;
+                this.patientCreationResourceService
+                  .updatePatientContact(
+                    patient.person.uuid,
+                    this.patientObsGroupId
+                  )
+                  .subscribe((response) => {
+                    this.router.navigate([
+                      '/patient-dashboard/patient/' +
+                        patient.person.uuid +
+                        '/general/general/landing-page'
+                    ]);
+                  });
+              }
+            },
+            (err) => {
+              this.loaderStatus = false;
+              const error = err.error.error.globalErrors;
+              this.errorAlert = true;
+              this.errorAlerts = error;
+              console.log('MWISHO 707 ', this.errorAlerts);
+            }
+          );
+        this.subscriptions.push(savePatientSub);
+      }*/
     }
+  }
+
+  public hasSameIdTypeAndValue(ids, currentId) {
+    const parentIdTypes = [
+      'ace5f7c7-c5f4-4e77-a077-5588a682a0d6', // OVCID 239848t = 239848t
+      '58a47054-1359-11df-a1f1-0026b9348838' // KENYA NATIONAL ID NUMBER
+    ];
+    const hasSameIdTypeAndValue = false;
+    const counter = 0;
+
+    return new Promise((resolve, reject) => {
+      ids.forEach((val) => {
+        console.log('748 FINAL VAL ', this.finalVal);
+        currentId = val.identifier;
+        this.patientResourceService
+          .searchPatient(val.identifier)
+          .pipe(take(1))
+          .subscribe((result) => {
+            console.log('754 FINAL VAL ', this.finalVal);
+            if (result.length > 0) {
+              result.forEach((_ids) => {
+                _ids.identifiers.forEach((id) => {
+                  console.log('758 FINAL VAL ', this.finalVal);
+                  if (
+                    id.identifier === val.identifier &&
+                    parentIdTypes.includes(id.identifierType.uuid) &&
+                    parentIdTypes.includes(val.identifierType)
+                  ) {
+                    console.log(
+                      '690  ',
+                      val.identifier,
+                      ' ',
+                      val.identifierType,
+                      '  ',
+                      id.identifier,
+                      '   ',
+                      id.identifierType.uuid
+                    );
+                    this.finalVal.push(val.identifier);
+                  } else if (
+                    id.identifier === val.identifier &&
+                    (!parentIdTypes.includes(id.identifierType.uuid) ||
+                      !parentIdTypes.includes(val.identifierType))
+                  ) {
+                    // finalVal.push({hasSameIdTypeAndValue: 0, curId : val.identifier  });
+                  }
+                });
+              });
+            } else {
+              // finalVal.push({hasSameIdTypeAndValue: 1,  curId : val.identifier});
+            }
+          });
+      });
+      console.log('finalVal ', this.finalVal);
+      resolve(this.finalVal);
+    });
   }
 
   public loadDashboard(createdPatient) {
@@ -801,6 +885,8 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
   private checkUniversal(): boolean {
     let found = false;
     // tslint:disable-next-line:prefer-for-of
+    console.log('this.identifiers 804 ', this.identifiers);
+    console.log('this.universal ', this.universal);
     for (let i = 0; i < this.identifiers.length; i++) {
       if (
         this.identifiers[i].identifierType === this.universal.identifierType
